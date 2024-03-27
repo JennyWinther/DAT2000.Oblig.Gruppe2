@@ -1,0 +1,1 @@
+from .beatles import Beatles

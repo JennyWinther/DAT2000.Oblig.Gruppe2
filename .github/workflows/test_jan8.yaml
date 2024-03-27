@@ -1,0 +1,31 @@
+#Basert på https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+name: Python-tester for øving 8. Januar
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - jan8/**
+
+jobs:
+  test_jan8:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Start postgresql
+      run: |
+        docker run -p 5432:5432 --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+        sleep 10s
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+      working-directory: jan8
+    - name: Test with pytest
+      run: |
+        pip install pytest==7.4.4
+        pytest
+      working-directory: jan8
