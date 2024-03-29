@@ -6,6 +6,7 @@ from .tabell import kjoretoy_tabell
 import logging
 from pathlib import Path
 
+
 def last_opp_kjoretoy(connstr: str, df:pl.DataFrame):
     logging.info(f"Starting database upload")
     # Vi lager engine for å koble til databasen med connstr

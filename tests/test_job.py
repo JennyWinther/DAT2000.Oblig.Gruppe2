@@ -27,7 +27,8 @@ def db():
 
 def test_kjoretoy_regdato(db):
     kjoretoy_endpoint = URL + "/regdato"
-    resp = requests.get(kjoretoy_endpoint)
+    regdato_param = "2022-01-01"
+    resp = requests.get(kjoretoy_endpoint, params={"regdato": regdato_param})
     svar = resp.json()
 
     forventet = [

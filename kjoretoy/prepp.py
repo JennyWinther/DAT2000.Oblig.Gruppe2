@@ -11,17 +11,11 @@ def prepp_kjoretoy(inn_fil: Union[str, pathlib.Path]) -> pl.DataFrame:
     df = pl.read_parquet(inn_fil)
 
     # Casting av dato-kolonner.
-    df = df.with_columns('parsedData', pl.col("tekn_reg_f_g_n").cast(str).str.strptime(pl.Date, format='%Y %m %d', strict=False))
-    df = df.drop('tekn_reg_f_g_n')
-    df = df.rename(columns={'parsedData': 'tekn_f_g_n'})
+    df = df.with_columns(pl.col("tekn_reg_f_g_n").cast(str).str.strptime(pl.Date, format='%Y %m %d', strict=False))
 
-    df = df.with_columns('parsedData', pl.col('tekn_reg_eier').cast(str).str.strptime(pl.Date, format='%Y %m %d'), strict=False)
-    df = df.drop('tekn_reg_eier')
-    df = df.rename(columns={'parsedData': 'tekn_reg_eier'})
+    df = df.with_columns(pl.col('tekn_reg_eier_dato').cast(str).str.strptime(pl.Date, format='%Y %m %d', strict=False))
 
-    df = df.with_columns('parsedData', pl.col('tekn_neste_pkk').cast(str).str.strptime(pl.Date, format='%Y %m %d', strict=False))
-    df = df.drop('tekn_neste_pkk')
-    df = df.rename(columns={'parsedData': 'tekn_neste_pkk'})
+    df = df.with_columns(pl.col('tekn_neste_pkk').cast(str).str.strptime(pl.Date, format='%Y %m %d', strict=False))
 
     # Denne er viktig fordi data er ikke unikt identifisert av kolonnene våre
     # Vi får trøbbel når vi skal gjøre group by senere - noen (forskjellige) biler har identiske data.
@@ -62,10 +56,9 @@ def prepp_kjoretoy(inn_fil: Union[str, pathlib.Path]) -> pl.DataFrame:
     )
 
     # Vi lager en egen elbil-kolonne
-    elbil = df.with_columns(
+    df = df.with_columns(
         elbil = pl.col('tekn_drivstoff') == '5'
     )
-    df = df.join(elbil)
 
     # Vi vil også ha inn skriftlig beskrivelse av bilmerket
     merkekode = pl.read_csv(STATIC_DATA / "merkekode.csv", separator=";").rename(

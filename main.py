@@ -19,6 +19,7 @@ app = FastAPI()
 async def root():
     return {"message": "Hello World"}
 
+
 @app.get("/regdato")
 async def regdato(regdato: str = Query(None)):
     if regdato is None:
