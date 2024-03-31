@@ -20,30 +20,46 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/regdato")
-async def regdato(regdato: str = Query(None)):
-    if regdato is None:
-        return {"error": "Skriv registreringsdato som et query parameter"}
+@app.get("/regdato/{regdatum}")
+async def regdato(regdatum: str):
 
     with engine.connect() as conn:
         res = conn.execute(
             kjoretoy.select().with_only_columns(
+                kjoretoy.c.tekn_reg_f_g_n,
                 kjoretoy.c.farge_navn,
-                kjoretoy.c.tekn_modell
+                kjoretoy.c.tekn_modell,
+                kjoretoy.c.merke_navn,
+                kjoretoy.c.elbil
             ).where(
-                # Dere må endre sånn at ønsket regdato angis som query-parameter i URL
-                kjoretoy.c.tekn_reg_f_g_n == literal(regdato))
+                kjoretoy.c.tekn_reg_f_g_n == literal(regdatum))
         )
 
         out_list = []
         for r in res:
             out = {}
-            out["farge"] = r[0]
-            out["modell"] = r[1]
+            out["regdato"] = r[0]
+            out["farge"] = r[1]
+            out["modell"] = r[2]
+            out["merke"] = r[3]
+            out["elbil"] = r[4]
             out_list.append(out)
-
         return out_list
-
-@app.get("/pkkdato")
-async def pkkdato():
-    pass
+#20241229
+@app.get("/pkkdato/{dato}")
+async def pkkdato(dato: str):
+    with engine.connect() as conn:
+        res = conn.execute(
+            kjoretoy.select().with_only_columns(
+                kjoretoy.c.tekn_modell,
+                kjoretoy.c.merke_navn,
+            ).where(
+                kjoretoy.c.tekn_neste_pkk == literal(dato))
+        )
+        out_list = []
+        for r in res:
+            out = {}
+            out["modell"] = r[0]
+            out["merke"] = r[1]
+            out_list.append(out)
+        return out_list

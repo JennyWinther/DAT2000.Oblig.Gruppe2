@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, Integer, String, MetaData, Date, Boolean, text, literal
+from sqlalchemy import Table, Column, Integer, String, MetaData, Date, Boolean
 
 
 def kjoretoy_tabell() -> Table:
