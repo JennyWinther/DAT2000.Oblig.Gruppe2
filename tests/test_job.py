@@ -31,19 +31,22 @@ def test_kjoretoy_regdato(db):
     svar = resp.json()
 
     forventet = [
-        {'elbil': True,
-         'regdato': "2022-01-01",
-         'farge': 'Svart (også blåsvart, grafitt mørk, gråsort, koksgrå mørk, koksgrå mørk metallic)',
-         'merke': 'PEUGEOT',
-         'modell': '2008'},
-        {'elbil': False,
-         'regdato': "2022-01-01",
-         'farge': 'Rød (også burgunder)',
-         'merke': 'LYNX',
-         'modell': 'ADVENTURE STD 600ACE'}]
+        {
+            "farge": "Rød (også burgunder)",
+            "modell": "ADVENTURE STD 600ACE",
+            "merke": "LYNX",
+            "elbil": False
+        },
+        {
+            "farge": "Svart (også blåsvart, grafitt mørk, gråsort, koksgrå mørk, koksgrå mørk metallic)",
+            "modell": "2008",
+            "merke": "PEUGEOT",
+            "elbil": True
+        }
+    ]
 
     # Vi skal sortere lister bestående av dict, og da må vi angi manuelt hvordan disse skal sorteres med en funksjon.
-    sorterer = lambda x: x["regdato"] + x["farge"] + x["modell"]
+    sorterer = lambda x: x["farge"] + x["modell"] + x["merke"]
 
     # Vi sorterer de to listene
     forventet.sort(key=sorterer)
@@ -56,15 +59,16 @@ def test_kjoretoy_2(db):
     resp = requests.get(kjoretoy_endpoint)
     svar = resp.json()
 
-    forventet = [{
-        "farge": "Grå",
-        "modell": "FH",
-        "merke": "VOLVO",
-        "elbil": False,
-        "regdato": "2022-01-02"
-    }]
+    forventet = [
+        {
+            "farge": "Grå",
+            "modell": "FH",
+            "merke": "VOLVO",
+            "elbil": False
+        }
+    ]
 
-    sorterer = lambda x: x["farge"] + x["modell"] + x["merke"] + x["regdato"]
+    sorterer = lambda x: x["farge"] + x["modell"] + x["merke"]
 
     forventet.sort(key=sorterer)
     svar.sort(key=sorterer)
@@ -78,20 +82,29 @@ def test_pkk_dato(db):
 
     forventet = [
         {
+            "regdato": "2022-01-27",
             "modell": "Kona",
-            "merke": "HYUNDAI"
+            "merke": "HYUNDAI",
+            "farge": "Blå",
+            "elbil": True
         },
         {
-            "modell": "Nissan Leaf 62kWh",
-            "merke": "NISSAN"
-        },
-        {
+            "regdato": "2022-01-04",
             "modell": "ENYAQ 80",
-            "merke": "SKODA"
+            "merke": "SKODA",
+            "farge": "Grå",
+            "elbil": True
+        },
+        {
+            "regdato": "2022-01-10",
+            "modell": "Nissan Leaf 62kWh",
+            "merke": "NISSAN",
+            "farge": "Hvit (også antikkhvit, offwhite)",
+            "elbil": True
         }
     ]
 
-    sorterer = lambda x: x["modell"] + x["merke"]
+    sorterer = lambda x: x["regdato"] + x["modell"] + x["merke"] + x["farge"]
 
     forventet.sort(key=sorterer)
     svar.sort(key=sorterer)

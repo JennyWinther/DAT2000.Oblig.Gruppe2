@@ -26,7 +26,6 @@ async def regdato(regdatum: str):
     with engine.connect() as conn:
         res = conn.execute(
             kjoretoy.select().with_only_columns(
-                kjoretoy.c.tekn_reg_f_g_n,
                 kjoretoy.c.farge_navn,
                 kjoretoy.c.tekn_modell,
                 kjoretoy.c.merke_navn,
@@ -38,11 +37,10 @@ async def regdato(regdatum: str):
         out_list = []
         for r in res:
             out = {}
-            out["regdato"] = r[0]
-            out["farge"] = r[1]
-            out["modell"] = r[2]
-            out["merke"] = r[3]
-            out["elbil"] = r[4]
+            out["farge"] = r[0]
+            out["modell"] = r[1]
+            out["merke"] = r[2]
+            out["elbil"] = r[3]
             out_list.append(out)
         return out_list
 #20241229
@@ -51,15 +49,21 @@ async def pkkdato(dato: str):
     with engine.connect() as conn:
         res = conn.execute(
             kjoretoy.select().with_only_columns(
+                kjoretoy.c.tekn_reg_f_g_n,
                 kjoretoy.c.tekn_modell,
                 kjoretoy.c.merke_navn,
+                kjoretoy.c.farge_navn,
+                kjoretoy.c.elbil
             ).where(
                 kjoretoy.c.tekn_neste_pkk == literal(dato))
         )
         out_list = []
         for r in res:
             out = {}
-            out["modell"] = r[0]
-            out["merke"] = r[1]
+            out["regdato"] = r[0]
+            out["modell"] = r[1]
+            out["merke"] = r[2]
+            out["farge"] = r[3]
+            out["elbil"] = r[4]
             out_list.append(out)
         return out_list
