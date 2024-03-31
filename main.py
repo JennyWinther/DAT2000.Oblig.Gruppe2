@@ -44,7 +44,7 @@ async def regdato(regdatum: str):
             out_list.append(out)
         return out_list
 #20241229
-@app.get("/pkkdato/{dato}")
+@app.get("/pkkdato/{dato}") #Litt diffus oppgave imo, jeg antar du mener at jeg skal ha det som regdato inneholder i tillegg til neste_pkk og førstegangsreg dato i dette endepunktet!! :)
 async def pkkdato(dato: str):
     with engine.connect() as conn:
         res = conn.execute(
